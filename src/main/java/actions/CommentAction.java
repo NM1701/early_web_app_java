@@ -40,12 +40,14 @@ public class CommentAction extends ActionBase{
     public void index() throws ServletException, IOException{
 
         //指定の日報に対するコメントのうち、指定ページの分を一覧画面に表示するコメントデータを取得
-        ReportView report_id = getRequestParam(AttributeConst.REP_ID);
+        String report_id = getRequestParam(AttributeConst.REP_ID);
+        ReportView report = new ReportView();
+        report.setId(toNumber(report_id));
         int page = getPage();
-        List<CommentView> comments = service.getMinePerPage(report_id, page);
+        List<CommentView> comments = service.getMinePerPage(report, page);
 
         //指定の日報へのコメント件数を取得
-        long commentsCount = service.countAllMine(report_id);
+        long commentsCount = service.countAllMine(report);
 
         putRequestScope(AttributeConst.COMMENTS, comments); //取得したコメントデータ
         putRequestScope(AttributeConst.COM_COUNT, commentsCount); //指定の日報への全てのコメントデータの件数

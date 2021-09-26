@@ -54,13 +54,13 @@ public class Comment {
      */
     @ManyToOne
     @JoinColumn(name = JpaConst.COM_COL_REP_ID, nullable = false)
-    private Report reportId;
+    private Report report;
 
     /**
      * コメントを投稿した従業員
      */
     @Column(name = JpaConst.COM_COL_COMMENTATOR_EMP, nullable = false)
-    private Employee commentatorEmployeeId;
+    private Integer commentator;
 
     /**
      * コメント内容

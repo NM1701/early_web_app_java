@@ -24,12 +24,12 @@ public class CommentView {
     /**
      * コメントする日報のid
      */
-    private ReportView report_id;
+    private ReportView report;
 
     /**
      * コメントを投稿した従業員
      */
-    private EmployeeView employee;
+    private Integer commentator;
 
     /**
      * コメント内容
