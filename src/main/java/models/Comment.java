@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -50,14 +52,15 @@ public class Comment {
     /**
      * コメントする日報のid
      */
-    @Column(name = JpaConst.COM_COL_REP_ID, nullable = false)
-    private Report report_id;
+    @ManyToOne
+    @JoinColumn(name = JpaConst.COM_COL_REP_ID, nullable = false)
+    private Report reportId;
 
     /**
      * コメントを投稿した従業員
      */
     @Column(name = JpaConst.COM_COL_COMMENTATOR_EMP, nullable = false)
-    private Employee employee;
+    private Employee commentatorEmployeeId;
 
     /**
      * コメント内容

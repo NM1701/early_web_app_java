@@ -11,6 +11,7 @@ public interface JpaConst {
 
     //データ取得件数の最大値
     int ROW_PER_PAGE = 15; //1ページに表示するレコードの数
+    int COM_PER_PAGE = 10; //1ページに表示するコメントの数
 
     //従業員テーブル
     String TABLE_EMP = "employees"; //テーブル名
@@ -85,10 +86,10 @@ public interface JpaConst {
     //指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
-    //指定の従業員が作成した指定の日報へのコメントを全件idの降順で取得する
+    //指定の日報へのコメントを全件idの降順で取得する
     String Q_COM_GET_ALL_MINE = ENTITY_COM + ".getAllMine";
     String Q_COM_GET_ALL_MINE_DEF = "SELECT c FROM Comment AS c WHERE c.report = :" + JPQL_PARM_REPORT + " ORDER BY c.id DESC";
-    //指定の従業員が作成した指定の日報へのコメント件数を取得する
+    //指定の日報へのコメント件数を取得する
     String Q_COM_COUNT_ALL_MINE = ENTITY_COM + ".countAllMine";
     String Q_COM_COUNT_ALL_MINE_DEF = "SELECT COUNT(c) FROM Comment AS c WHERE c.report = :" + JPQL_PARM_REPORT;
 }

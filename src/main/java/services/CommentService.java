@@ -27,14 +27,14 @@ public class CommentService extends ServiceBase {
 
         List<Comment> comments = em.createNamedQuery(JpaConst.Q_COM_GET_ALL_MINE, Comment.class)
                 .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
-                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
-                .setMaxResults(JpaConst.ROW_PER_PAGE)
+                .setFirstResult(JpaConst.COM_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.COM_PER_PAGE)
                 .getResultList();
         return CommentConverter.toViewList(comments);
     }
 
     /**
-     * 指定の日報に作成されたコメントデータの件数を取得し、返却する
+     * 指定の日報へのコメントデータの件数を取得し、返却する
      * @param report
      * @return コメントデータの件数
      */
