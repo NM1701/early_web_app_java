@@ -31,7 +31,8 @@
             </tbody>
         </table>
 
-        <div id="comments">
+        <div id="comments（指定の日報に対するコメントをページに表示できる分（最大10個）を表示する）">
+
             <h3>番目のコメント</h3>
 
         </div>
