@@ -3,9 +3,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="constants.ForwardConst" %>
 
-<c:set var="actCom" value="${ForwardConst.ACT_COM.getValue()}" />
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actCom" value="${ForwardConst.ACT_COM.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
+<c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commNew" value="${ForwardConst.CMD_NEW.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
@@ -16,25 +17,42 @@
             </div>
         </c:if>
         <h2>コメント　一覧</h2>
-        <table id="comment_list">
+        <p>（コメント対象の日報情報）</p>
+        <table id="report_info">
             <tbody>
                 <tr>
                     <th class="report_name">日報作成者</th>
-                    <th class="report_title">日報タイトル</th>
+                    <td class="report_name"><c:out value="${report.employee.name}" /></td>
                 </tr>
-                <c:forEach var="comment" items="${comments}" varStatus="status">
-                    <tr class="row${status.count % 2}">
-                        <td class="report_name"><c:out value="${report.employee.name}" /></td>
-                        <td class="report_title">${report.title}</td>
-                    </tr>
-                </c:forEach>
+                <tr>
+                    <th class="report_title">日報タイトル</th>
+                    <td class="report_title"><c:out value="${report.title}" /></td>
             </tbody>
         </table>
+        <br/>
 
-        <div id="comments（指定の日報に対するコメントをページに表示できる分（最大10個）を表示する）">
+        <div id="comments_list">
+            <c:forEach var="comment" items="${comments}" varStatus="status">
+                <fmt:parseDate value="${comment.createdAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="commentTime" type="date" />
 
-            <h3>番目のコメント</h3>
+                    <h3>${comments_count - status.count - (10 * page) + 11}番目のコメント</h3>
 
+
+                        <table id="comment_info" style="border:none;">
+                            <tr style="border:none;">
+                                <th class="comment_date" style="border:none;">日時　　　　　：</th>
+                                <td class="comment_date" style="border:none;"><fmt:formatDate value="${commentTime}" pattern="yyyy年MM月dd日 HH:mm:ss" /></td>
+                            </tr>
+                            <tr style="border:none;">
+                                <th class="commentator" style="border:none;">氏名　　　　　：</th>
+                                <td class="commentator" style="border:none;"><c:out value="${comment.commentator.name}" /></td>
+                            </tr>
+                            <tr style="border:none;">
+                                <th class="comment_content" style="border:none;">コメント　　　：</th>
+                                <td class="comment_content" style="border:none;"><c:out value="${comment.comment}" /></td>
+                            </tr>
+                        </table>
+            </c:forEach>
         </div>
 
         <div id="pagination">
@@ -50,8 +68,9 @@
                 </c:choose>
             </c:forEach>
         </div>
-        <p><a href="<c:url value='?action=${actCom}&command=${commNew}' />">コメントを書く</a></p>
-        <p><a href="<c:url value='?action=${actRep}&command=${commIdx}' />">日報詳細ページに戻る</a></p>
+
+        <p><a href="<c:url value='?action=${actCom}&command=${commNew}&id=${report.id}' />">コメントを書く</a></p>
+        <p><a href="<c:url value='?action=${actRep}&command=${commShow}&id=${report.id}' />">日報詳細ページに戻る</a></p>
 
     </c:param>
 </c:import>

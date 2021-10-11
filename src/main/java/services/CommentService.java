@@ -17,7 +17,7 @@ import models.validators.CommentValidator;
 public class CommentService extends ServiceBase {
 
     /**
-     * 指定の日報に作成されたコメントデータを、指定ページ数の一覧画面に表示する分取得しCommenttViewのリストで返却する
+     * 指定の日報に作成されたコメントデータを、指定ページ数の一覧画面に表示する分取得しCommentViewのリストで返却する
      * @param report 日報
      * @param page ページ数
      * @return 一覧画面に表示するデータのリスト

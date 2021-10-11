@@ -29,7 +29,7 @@ public class CommentView {
     /**
      * コメントを投稿した従業員
      */
-    private Integer commentator;
+    private EmployeeView commentator;
 
     /**
      * コメント内容

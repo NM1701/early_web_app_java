@@ -124,7 +124,7 @@ public class EmployeeAction extends ActionBase{
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
 
                 //一覧画面にリダイレクト
-                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX, null);
             }
 
         }
@@ -220,7 +220,7 @@ public class EmployeeAction extends ActionBase{
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
 
                 //一覧画面にリダイレクト
-                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX, null);
             }
         }
     }
@@ -242,7 +242,7 @@ public class EmployeeAction extends ActionBase{
             putSessionScope(AttributeConst.FLUSH, MessageConst.I_DELETED.getMessage());
 
             //一覧画面にリダイレクト
-            redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+            redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX, null);
         }
     }
 

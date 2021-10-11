@@ -19,7 +19,7 @@ public class CommentConverter {
         return new Comment(
                 cv.getId(),
                 ReportConverter.toModel(cv.getReport()),
-                cv.getCommentator(),
+                EmployeeConverter.toModel(cv.getCommentator()),
                 cv.getComment(),
                 cv.getCreatedAt());
     }
@@ -38,7 +38,7 @@ public class CommentConverter {
         return new CommentView(
                 c.getId(),
                 ReportConverter.toView(c.getReport()),
-                c.getCommentator(),
+                EmployeeConverter.toView(c.getCommentator()),
                 c.getComment(),
                 c.getCreatedAt());
     }
@@ -66,7 +66,7 @@ public class CommentConverter {
     public static void copyViewModel(Comment c, CommentView cv) {
         c.setId(cv.getId());
         c.setReport(ReportConverter.toModel(cv.getReport()));
-        c.setCommentator(cv.getCommentator());
+//        c.setCommentator(cv.getCommentator());
         c.setComment(cv.getComment());
         c.setCreatedAt(cv.getCreatedAt());
     }
@@ -79,7 +79,7 @@ public class CommentConverter {
     public static void copyModelToView(Comment c, CommentView cv) {
     cv.setId(c.getId());
     cv.setReport(ReportConverter.toView(c.getReport()));
-    cv.setCommentator(c.getCommentator());
+//    cv.setCommentator(c.getCommentator());
     cv.setComment(c.getComment());
     cv.setCreatedAt(c.getCreatedAt());
     }

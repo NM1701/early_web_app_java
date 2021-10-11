@@ -42,6 +42,12 @@ public class ReportAction extends ActionBase{
      */
     public void index() throws ServletException, IOException {
 
+        //セッションに日報データが設定されている場合はセッションから削除する
+        ReportView report = (ReportView) getSessionScope(AttributeConst.REPORT);
+        if (report != null) {
+            removeSessionScope(AttributeConst.REPORT);
+        }
+
         //指定されたページ数の一覧画面に表示する日報データを取得
         int page = getPage();
         List<ReportView> reports = service.getAllPerPage(page);
@@ -136,7 +142,7 @@ public class ReportAction extends ActionBase{
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
 
                 //一覧画面にリダイレクト
-                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX, null);
             }
         }
     }
@@ -157,7 +163,8 @@ public class ReportAction extends ActionBase{
 
         } else {
 
-            putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
+            //取得した日報データをセッションに設定
+            putSessionScope(AttributeConst.REPORT, rv);
 
             //詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);
@@ -170,6 +177,12 @@ public class ReportAction extends ActionBase{
      * @throws IOException
      */
     public void edit() throws ServletException, IOException {
+
+        //セッションに日報データが設定されている場合はセッションから削除する
+        ReportView report = (ReportView) getSessionScope(AttributeConst.REPORT);
+        if (report != null) {
+            removeSessionScope(AttributeConst.REPORT);
+        }
 
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
@@ -230,7 +243,7 @@ public class ReportAction extends ActionBase{
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_UPDATED.getMessage());
 
                 //一覧画面にリダイレクト
-                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX, null);
 
             }
         }

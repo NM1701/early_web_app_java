@@ -36,7 +36,7 @@ public class CommentValidator {
 
     private static String validateComment(String comment) {
         if (comment == null || comment.equals("")) {
-            return MessageConst.E_NO_COMMENT.getMessage();
+            return MessageConst.E_NOCOMMENT.getMessage();
         }
 
         //入力値がある場合は空文字を返す

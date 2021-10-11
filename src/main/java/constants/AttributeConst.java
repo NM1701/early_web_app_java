@@ -55,8 +55,7 @@ public enum AttributeConst {
     COMMENTS("comments"),
     COM_COUNT("comments_count"),
     COM_ID("id"),
-    COM_DATETIME("comment_datetime"),
-    COM_CONTENT("content");
+    COM_CONTENT("comment");
 
     private final String text;
     private final Integer i;

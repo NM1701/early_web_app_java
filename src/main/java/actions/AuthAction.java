@@ -83,7 +83,7 @@ public class AuthAction extends ActionBase {
                 //セッションにログイン完了のフラッシュメッセージを設定
                 putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGINED.getMessage());
                 //トップページへリダイレクト
-                redirect(ForwardConst.ACT_TOP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_TOP, ForwardConst.CMD_INDEX, null);
             }
         } else {
             //認証失敗の場合
@@ -114,7 +114,7 @@ public class AuthAction extends ActionBase {
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_LOGOUT.getMessage());
 
         //ログイン画面にリダイレクト
-        redirect(ForwardConst.ACT_AUTH, ForwardConst.CMD_SHOW_LOGIN);
+        redirect(ForwardConst.ACT_AUTH, ForwardConst.CMD_SHOW_LOGIN, null);
 
     }
 }

@@ -59,8 +59,9 @@ public class Comment {
     /**
      * コメントを投稿した従業員
      */
-    @Column(name = JpaConst.COM_COL_COMMENTATOR_EMP, nullable = false)
-    private Integer commentator;
+    @ManyToOne
+    @JoinColumn(name = JpaConst.COM_COL_COMMENTATOR_EMP, nullable = false)
+    private Employee commentator;
 
     /**
      * コメント内容
