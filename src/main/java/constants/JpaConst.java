@@ -13,6 +13,9 @@ public interface JpaConst {
     int ROW_PER_PAGE = 15; //1ページに表示するレコードの数
     int COM_PER_PAGE = 10; //1ページに表示するコメントの数
 
+    //1人の従業員が指定の日報に登録できるコメントデータ件数
+    int MAX_COM_PER_EMP_PER_REP = 5;
+
     //従業員テーブル
     String TABLE_EMP = "employees"; //テーブル名
     //従業員テーブルカラム
@@ -92,4 +95,7 @@ public interface JpaConst {
     //指定の日報へのコメント件数を取得する
     String Q_COM_COUNT_ALL_MINE = ENTITY_COM + ".countAllMine";
     String Q_COM_COUNT_ALL_MINE_DEF = "SELECT COUNT(c) FROM Comment AS c WHERE c.report = :" + JPQL_PARM_REPORT;
+    //指定の日報へ指定従業員が登録したコメント件数を取得する
+    String Q_COM_COUNT_BY_REP_AND_EMP = ENTITY_COM + ".countCommentsPerRepPerEmp";
+    String Q_COM_COUNT_BY_REP_AND_EMP_DEF = "SELECT COUNT(c) FROM Comment AS c WHERE c.report = :" + JPQL_PARM_REPORT + " AND c.commentator = :" + JPQL_PARM_EMPLOYEE;
 }

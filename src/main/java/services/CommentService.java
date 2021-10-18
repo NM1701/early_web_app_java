@@ -3,8 +3,12 @@ package services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import actions.views.CommentConverter;
 import actions.views.CommentView;
+import actions.views.EmployeeConverter;
+import actions.views.EmployeeView;
 import actions.views.ReportConverter;
 import actions.views.ReportView;
 import constants.JpaConst;
@@ -45,6 +49,24 @@ public class CommentService extends ServiceBase {
                 .getSingleResult();
 
         return count;
+    }
+
+    /**
+     * 指定の日報へ指定の従業員が登録したコメントデータの件数を取得し返却する
+     * @param report
+     * @param commentator
+     * @return コメントデータの件数
+     */
+    public long countCommentsPerRepPerEmp(ReportView report, EmployeeView commentator) {
+        try {
+            long commentsRepEmp = (long) em.createNamedQuery(JpaConst.Q_COM_COUNT_BY_REP_AND_EMP, Long.class)
+                    .setParameter(JpaConst.JPQL_PARM_REPORT, ReportConverter.toModel(report))
+                    .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(commentator))
+                    .getSingleResult();
+            return commentsRepEmp;
+        } catch (NoResultException ex) {
+        }
+        return 0;
     }
 
     /**
