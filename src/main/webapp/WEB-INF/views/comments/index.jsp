@@ -16,6 +16,11 @@
                 <c:out value="${flush}"></c:out>
             </div>
         </c:if>
+        <c:if test="${errors != null}">
+            <div id="flush_error">
+                <c:out value="${errors}"></c:out>
+            </div>
+        </c:if>
         <h2>コメント　一覧</h2>
         <p>（コメント対象の日報情報）</p>
         <table id="report_info">

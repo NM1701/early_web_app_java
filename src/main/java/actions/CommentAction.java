@@ -54,11 +54,18 @@ public class CommentAction extends ActionBase{
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.COM_PER_PAGE); //1ページに表示するコメントの数
 
-        //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+        //セッションにフラッシュメッセージ"FLUSH"が設定されている場合はリクエストスコープに移し替え、セッションからは削除する
         String flush = getSessionScope(AttributeConst.FLUSH);
         if (flush != null) {
             putRequestScope(AttributeConst.FLUSH, flush);
             removeSessionScope(AttributeConst.FLUSH);
+        }
+
+        //セッションにフラッシュメッセージ"FAILURE"が設定されている場合はリクエストスコープに移し替え、セッションからは削除する
+        String failure = getSessionScope(AttributeConst.ERR);
+        if (failure != null) {
+            putRequestScope(AttributeConst.ERR, failure);
+            removeSessionScope(AttributeConst.ERR);
         }
 
         //一覧画面を表示
@@ -72,11 +79,28 @@ public class CommentAction extends ActionBase{
      */
     public void entryNew() throws ServletException, IOException{
 
-        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-        putRequestScope(AttributeConst.COMMENT, new CommentView()); //空のコメントインスタンス
+        //セッションからログイン中の従業員情報、日報情報を取得
+        EmployeeView empView = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        ReportView repView = (ReportView) getSessionScope(AttributeConst.REPORT);
 
-        //新規登録画面を表示
-        forward(ForwardConst.FW_COM_NEW);
+        // ログイン中の従業員が指定日報に登録したコメント件数を取得
+        long empCommentsCount = service.countCommentsPerRepPerEmp(repView, empView);
+
+        if (empCommentsCount >= JpaConst.MAX_COM_PER_EMP_PER_REP) {
+            //コメント件数5件以上の場合、コメント不可のフラッシュメッセージをセッションに設定
+            putSessionScope(AttributeConst.ERR, MessageConst.E_UPPER_LIMIT_COM_PER_REP.getMessage());
+
+            //一覧画面へリダイレクト
+            redirect(ForwardConst.ACT_COM, ForwardConst.CMD_INDEX, repView.getId());
+
+        }else {
+            //コメント件数5件未満の場合
+            putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+            putRequestScope(AttributeConst.COMMENT, new CommentView()); //空のコメントインスタンス
+
+            //新規登録画面を表示
+            forward(ForwardConst.FW_COM_NEW);
+        }
     }
 
     /**
@@ -93,49 +117,47 @@ public class CommentAction extends ActionBase{
             EmployeeView empView = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
             ReportView repView = (ReportView) getSessionScope(AttributeConst.REPORT);
 
-            // ログイン中の従業員が指定日報に登録したコメント件数を取得
-            long empCommentsCount = service.countCommentsPerRepPerEmp(repView, empView);
-
-            if(empCommentsCount >= JpaConst.MAX_COM_PER_EMP_PER_REP) {
-                //コメント件数5件以上の場合、コメント不可のフラッシュメッセージをセッションに設定
-                    putSessionScope(AttributeConst.FLUSH, MessageConst.E_UPPER_LIMIT_COM.getMessage());
-
-                //一覧画面へリダイレクト
-                redirect(ForwardConst.ACT_COM, ForwardConst.CMD_INDEX, repView.getId());
-
-            }else {
-                //コメント件数5件未満の場合
-                //パラメータの値をもとにコメント情報のインスタンスを作成する
-                CommentView cv = new CommentView(
+            //パラメータの値をもとにコメント情報のインスタンスを作成する
+            CommentView cv = new CommentView(
                         null,   //コメントid
                         repView,  //日報情報
                         empView,  //コメント従業員id
                         getRequestParam(AttributeConst.COM_CONTENT),    //コメント内容
                         null);  //コメント登録日時
 
-                //コメント情報登録
-                List<String> errors = service.create(cv);
+            //コメント文字数が120文字以上の場合、再入力を促す
+            if (getRequestParam(AttributeConst.COM_CONTENT).length() > JpaConst.UPPER_LIMIT_COMMENT) {
 
-                if (errors.size() > 0) {
-                    //登録中にエラーがあった場合
+                putRequestScope(AttributeConst.ERR, MessageConst.E_UPPER_LIMIT_COMMENT.getMessage());
+                putRequestScope(AttributeConst.TOKEN, getTokenId());    //CSRF対策用トークン
+                putRequestScope(AttributeConst.COMMENT, cv);    //入力されたコメント情報
 
-                    putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
-                    putRequestScope(AttributeConst.COMMENT, cv);//入力されたコメント情報
-                    putRequestScope(AttributeConst.ERR, errors);//エラーのリスト
+                //新規登録画面を再表示
+                forward(ForwardConst.FW_COM_NEW);
 
-                    //新規登録画面を再表示
-                    forward(ForwardConst.FW_COM_NEW);
+            } else {
+            //コメント情報登録
+            List<String> errors = service.create(cv);
 
-                } else {
-                    //登録中にエラーがなかった場合
-                    //セッションに登録完了のフラッシュメッセージを設定
-                    putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+            if (errors.size() > 0) {
+                //登録中にエラーがあった場合
 
-                    //一覧画面にリダイレクト
-                    redirect(ForwardConst.ACT_COM, ForwardConst.CMD_INDEX, repView.getId());
-                }
+                putRequestScope(AttributeConst.TOKEN, getTokenId());    //CSRF対策用トークン
+                putRequestScope(AttributeConst.COMMENT, cv);    //入力されたコメント情報
+                putRequestScope(AttributeConst.ERR, errors);    //エラーのリスト
+
+                //新規登録画面を再表示
+                forward(ForwardConst.FW_COM_NEW);
+
+            } else {
+                //登録中にエラーがなかった場合
+                //セッションに登録完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH, MessageConst.I_REGISTERED.getMessage());
+
+                //一覧画面にリダイレクト
+                redirect(ForwardConst.ACT_COM, ForwardConst.CMD_INDEX, repView.getId());
+            }
             }
         }
     }
-
 }

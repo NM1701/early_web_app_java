@@ -26,6 +26,7 @@
                     <td class="report_title"><c:out value="${report.title}" /></td>
             </tbody>
         </table>
+        <br /><br />
 
         <form method="POST" action="<c:url value='?action=${actCom}&command=${commCrt}&id=${report.id}' />">
             <c:if test="${errors != null}">

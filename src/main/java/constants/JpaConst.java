@@ -16,6 +16,9 @@ public interface JpaConst {
     //1人の従業員が指定の日報に登録できるコメントデータ件数
     int MAX_COM_PER_EMP_PER_REP = 5;
 
+    //コメントとして入力可能な文字数
+    int UPPER_LIMIT_COMMENT = 120;
+
     //従業員テーブル
     String TABLE_EMP = "employees"; //テーブル名
     //従業員テーブルカラム

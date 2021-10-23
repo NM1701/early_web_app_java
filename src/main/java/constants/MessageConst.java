@@ -23,8 +23,10 @@ public enum MessageConst {
     E_EMP_CODE_EXIST("入力された社員番号の情報は既に存在しています。"),
     E_NOTITLE("タイトルを入力してください。"),
     E_NOCONTENT("内容を入力してください。"),
+    E_FALSE_REP_DATE("日報日付に誤りがあります。今日以前の日付を指定してください。"),
     E_NOCOMMENT("コメントを入力してください。"),
-    E_UPPER_LIMIT_COM("1つの日報へのコメント回数は5回までです。");
+    E_UPPER_LIMIT_COM_PER_REP("1つの日報へのコメント回数は5回までです。"),
+    E_UPPER_LIMIT_COMMENT("コメントは120字以内で入力してください。");
 
 
     /**
